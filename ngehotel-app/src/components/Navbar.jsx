@@ -1,7 +1,14 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import {assets} from "../assets/assets";
 import { useClerk, useUser, UserButton } from "@clerk/clerk-react";
+
+
+  const BookIcon = ()=>(
+    <svg className="w-4 h-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" >
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
+</svg>
+)
 
 
 const Navbar = () => {
@@ -14,8 +21,8 @@ const Navbar = () => {
 
   
 
-    const [isScrolled, setIsScrolled] = React.useState(false);
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
    //  openSignIn() Ini adalah fungsi bawaan Clerk untuk menampilkan popup atau modal login ke pengguna.
     const {openSignIn} = useClerk();
@@ -23,14 +30,26 @@ const Navbar = () => {
     // useUser() Ini adalah fungsi bawaan Clerk untuk mengakses informasi pengguna yang sedang login. jika ada user yang login nanti object key user yang kta destrukturing ada isinya
     const {user} = useUser();
     console.log(user)
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    React.useEffect(() => {
+    useEffect(() => {
+
+      if ( location.pathname !== "/"){
+        setIsScrolled(true);
+        return
+       } else {
+        setIsScrolled(false);
+       }
+
+       setIsScrolled(prev => location.pathname !== '/' ? true : prev);
+
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 10);
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [location.pathname]);  // useEffect ini dijalankan setiap user berpidah halaman
 
     return (
    
@@ -50,7 +69,7 @@ const Navbar = () => {
                             <div className={`${isScrolled ? "bg-gray-700" : "bg-white"} h-0.5 w-0 group-hover:w-full transition-all duration-300`} />
                         </a>
                     ))}
-                    <button className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`}>
+                    <button className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`} onClick={() => navigate('/owner')}>
                       Dashboard
                     </button>
                 </div>
@@ -60,17 +79,31 @@ const Navbar = () => {
                     <img src={assets.searchIcon} alt="search" className={`${isScrolled ? "invert" : ""} h-7 transition-all duration-500`} />
 
                     {user ?
-                     <UserButton/>
+                     (<UserButton>
+                      <UserButton.MenuItems>
+                        // menambahkan menu item di dropdown profile dengan nama My Bookings ketika di clik mengarah ke halaman /my-bookings
+                        <UserButton.Action label="My Bookings" labelIcon={<BookIcon/>} onClick={() => navigate('/my-bookings') }/>
+                      </UserButton.MenuItems>
+                     </UserButton>)
                       : 
-                     <button onClick={() => openSignIn()} className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? "text-white bg-black" : "bg-white text-black"}`}>
+                    ( <button onClick={() => openSignIn()} className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? "text-white bg-black" : "bg-white text-black"}`}>
                         Login
-                    </button>}
-
+                    </button>
+                    ) 
+                    }
                     
                 </div>
 
                 {/* Mobile Menu Button */}
                 <div className="flex items-center gap-3 md:hidden">
+                    {user &&  
+                    <UserButton>
+                      <UserButton.MenuItems>
+                        // menambahkan menu item di dropdown profile dengan nama My Bookings ketika di clik mengarah ke halaman /my-bookings
+                        <UserButton.Action label="My Bookings" labelIcon={<BookIcon/>} onClick={() => navigate('/my-bookings') }/>
+                      </UserButton.MenuItems>
+                     </UserButton>
+                     }
                     <img src={assets.menuIcon} onClick={() => setIsMenuOpen(true)} alt="menu" className={`${isScrolled && 'invert'} h-4`}/>
                 </div>
 
@@ -85,14 +118,15 @@ const Navbar = () => {
                             {link.name}
                         </a>
                     ))}
+            {/* kalau ada data usernya render button Dashboard */}
+             { user && <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all" onClick={() => navigate('/owner')}>
+                      Dashboard
+                  </button>}
 
-                    <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
-                        Dashboard
-                    </button>
-
-                    <button onClick={() => openSignIn()} className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">
+              {/* kalau tidak ada data usernya render button login */}
+                   { !user && <button onClick={() => openSignIn()} className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">
                         Login
-                    </button>
+                    </button>}
                 </div>
             </nav>
      
