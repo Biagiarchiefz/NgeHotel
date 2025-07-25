@@ -81,7 +81,7 @@ export const cities = [
     "London",
 ];
 
-// Exclusive Offers Dummy Data
+// Exclusive Offers Dummy Data  
 export const exclusiveOffers = [
     { _id: 1, title: "Summer Escape Package", description: "Enjoy a complimentary night and daily breakfast", priceOff: 25, expiryDate: "Aug 31", image: exclusiveOfferCardImg1 },
     { _id: 2, title: "Romantic Getaway", description: "Special couples package including spa treatment", priceOff: 20, expiryDate: "Sep 20", image: exclusiveOfferCardImg2 },
