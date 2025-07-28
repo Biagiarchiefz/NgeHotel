@@ -97,6 +97,7 @@ export const testimonials = [
 
 // Facility Icon
 export const facilityIcons = {
+    // menggunakan dot notasi untuk mengakses Object ini tidak bisa, karena keynya mengandung spasi, jadi kita harus menggunakan bracket notasi []
     "Free WiFi": assets.freeWifiIcon,
     "Free Breakfast": assets.freeBreakfastIcon,
     "Room Service": assets.roomServiceIcon,
