@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @theme {
-  --colot-primary: #2563EB;
+  --color-primary: #2563EB;
   --color-secondary: #FBBF24;
 }
 
