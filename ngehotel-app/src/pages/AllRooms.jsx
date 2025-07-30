@@ -76,7 +76,7 @@ const AllRooms = () => {
             <img
               // kenapa tidak menggunakan return?  kan tidak mengembalikan nilai
               onClick={() => {
-                navigate(`/room/${room._id}`);
+                navigate(`/rooms/${room._id}`);
                 scrollTo(0, 0);
               }}
               src={room.images[0]}
@@ -88,7 +88,7 @@ const AllRooms = () => {
             <div className="md:w-1/2 flex flex-col gap-2">
               <p className="text-gray-500">{room.hotel.city}</p>
               <p
-                onClick={() => navigate(`/room/${room._id}`)}
+                onClick={() => navigate(`/rooms/${room._id}`)}
                 className="text-gray-800 text-3xl font-playfair cursor-pointer"
               >
                 {room.hotel.name}
