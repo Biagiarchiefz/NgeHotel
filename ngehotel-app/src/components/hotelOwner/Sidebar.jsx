@@ -10,10 +10,13 @@ const Sidebar = () => {
     {name : "List Room", path : "/owner/list-room", icon : assets.listIcon},
   ]
 
+//  React Router secara otomatis mengirimkan sebuah objek ke dalam function className, isActive → true jika path yang dituju saat ini adalah path yang aktif
+// Jika kamu menggunakan end, maka <NavLink> hanya akan dianggap aktif (isActive = true) jika URL saat ini tepat sama dengan nilai to.
   return (
     <div className='md:w-64 w-16 border-r h-full text-base border-gray-300 pt-4 flex flex-col transition-all duration-300'>
       {sidebarLinks.map((item, index) => (
-        <NavLink to={item.path} key={index} end='/owner' className={({isActive}) => `flex items-center py-3 px-4 md:px-8 gap-3 ${isActive ? "border-r-4 md:border-r-[6px] bg-blue-600/10 border-blue-600 text-blue-600" : "hover:bg-gray-100/90 border-white text-gray-700"}`}>
+        // isActive adalah parameter otomatis dari React Router <NavLink>, dia bernilai boolean true/false, nilai false jika path yang dituju saat ini bukan path yang aktif
+        <NavLink to={item.path} key={index} end='/owner' className={({isActive}) => `flex items-center py-3 px-4 md:px-8 gap-3  ${isActive ? "border-r-4 md:border-r-[6px] bg-blue-600/10 border-blue-600 text-blue-600" : "hover:bg-gray-100/90 border-white text-gray-700"}`}>
             <img src={item.icon} alt="item-name" className='min-h-6 min-w-6' />
             <p className='md:block hidden text-center'>{item.name}</p>
         </NavLink>
